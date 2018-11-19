@@ -2,7 +2,7 @@ import struct
 import sys
 import binascii
 from calc_pik2_checksum import calc_checksum
-from pik2_savefile_constants import OFFSET
+from pik2_savefile_constants import *
 
 try:
     infile = sys.argv[1]
@@ -70,5 +70,79 @@ def edit_day_counter():
     f.write(sf_day)
     f.flush()
 
+def edit_poko_count(underground=False):
+    if not underground:
+        f.seek(offset + OFFSET.POKO_COUNT)
+        pokos = f.read(4)
+        newpokos = input("the current poko count is " + str(int.from_bytes(pokos, "big")) + " input what you want to change it to (in decimal): ")
+        newpokos = int(newpokos)
+        newpokos = newpokos.to_bytes(4, "big")
+        
+        #write to locations
+        f.seek(offset + OFFSET.POKO_COUNT)
+        f.write(newpokos)
+        f.seek(offset + OFFSET.SF_POKO_COUNT)
+        f.write(newpokos)
+        f.flush()
+    else:
+        f.seek(offset + OFFSET.UNDERGROUND_POKO_COUNT)
+        pokos = f.read(4)
+        newpokos = input("the current underground poko count is " + str(int.from_bytes(pokos, "big")) + " input what you want to change it to (in decimal): ")
+        newpokos = int(newpokos)
+        newpokos = newpokos.to_bytes(4, "big")
+        
+        #write to location
+        f.seek(offset + OFFSET.UNDERGROUND_POKO_COUNT)
+        f.write(newpokos)
+        f.flush()
+
+def edit_exploration_kit():
+    #get string of ek treasures and their bitmask value
+    outstr = ""
+    for item in EXPLORATION_KIT.EK_TREASURE_NAME:
+        outstr += item + ": " + str(EXPLORATION_KIT.EK_TREASURE_NAME[item]) + ", "
+    print(outstr)
+
+    #seek to location and get current bitmask
+    f.seek(offset + OFFSET.EXPLORATION_KIT)
+    ek = f.read(2)
+    newek = input("The current sum of these is " + str(int.from_bytes(ek, "big")) + " input what you want to change it to: ")
+    newek = int(newek)
+
+    #write to location
+    newek = newek.to_bytes(2, "big")
+    f.seek(offset + OFFSET.EXPLORATION_KIT)
+    f.write(newek)
+    f.flush()
+
+def edit_pikmin_onion():
+    
+    isdone = False
+    while not isdone:
+        pik_color = "null"
+        while pik_color.upper() not in OFFSET.PIKMIN_ONION and not isdone:
+            pik_color = input("Input a pikmin color (Blue, Red, Yellow, Purple, White) (input \"done\" to finish): ")
+            pik_color = pik_color.upper()
+            if pik_color == "DONE":
+                isdone = True
+        pik_type = "null"
+        while pik_type.upper() not in OFFSET.PIKMIN_SUB_OFFSET and not isdone:
+            pik_type = input("Input a pikmin type (Leaf, Bud, Flower): ")
+            pik_type = pik_type.upper()
+        if not isdone:
+            f.seek(offset + OFFSET.PIKMIN_ONION[pik_color] + OFFSET.PIKMIN_SUB_OFFSET[pik_type])
+            current_piks = f.read(4)
+            print(hex(OFFSET.PIKMIN_ONION[pik_color] + OFFSET.PIKMIN_SUB_OFFSET[pik_type]))
+            newpiks = input("The Current pikmin in this Onion is " + str(int.from_bytes(current_piks, "big")) + " input what you want to change it to: ")
+            newpiks = int(newpiks)
+        
+        #write to location
+            newpiks = newpiks.to_bytes(4, "big")
+            f.seek(offset + OFFSET.PIKMIN_ONION[pik_color] + OFFSET.PIKMIN_SUB_OFFSET[pik_type])
+            f.write(newpiks)
+            f.flush()
+
+edit_pikmin_onion()
+edit_exploration_kit()
 edit_day_counter()
 write_checksum(infile)
