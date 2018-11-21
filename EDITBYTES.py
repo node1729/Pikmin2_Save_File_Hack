@@ -29,12 +29,30 @@ while True:
     byte_len = int(byte_len, 16)
 
     f.seek(offset + byte_to_modify)
-    edit_byte = input("This byte is: 0x" + str(binascii.hexlify(f.read(byte_len)))[2:-1] + " insert value to change it to: 0x")
+    current_value = int.from_bytes(f.read(byte_len), "big")
+    base_edit = 0
+    while base_edit != 2 and base_edit != 8 and base_edit != 10 and base_edit != 16:
+        base_edit = input("input the base you want to edit the value to (2, 8, 10, 16): ")
+        base_edit = int(base_edit)
+    
+    if base_edit == 2:
+        outstr = bin(current_value)
+    elif base_edit == 8:
+        outstr = oct(current_value)
+    elif base_edit == 10:
+        outstr = str(current_value)
+    elif base_edit == 16:
+        outstr = hex(current_value)
 
+    edit_byte = input("This value is " + outstr + " insert value to change it to (in base " + str(base_edit) + "): ")
+    
+    edit_byte = int(edit_byte, base_edit)
+    
+    edit_byte = edit_byte.to_bytes(byte_len, "big")
     #ensure the string is long enough
-    while len(edit_byte) < byte_len * 2:
+    """while len(edit_byte) < byte_len * 2:
         edit_byte = "0" + edit_byte
-    edit_byte = bytearray.fromhex(edit_byte)
+    edit_byte = bytearray.fromhex(edit_byte)"""
     # go back to the position that the byte starts at
     f.seek(0 - byte_len, 1)
 
