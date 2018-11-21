@@ -33,3 +33,14 @@ for i in range(0, shorter_file_len):
         outfile.write("Difference at offset:" + str(hex(i)) + " of " + str(hex(data1[i])) + " vs " + str(hex(data2[i])) + "\n") 
         outfile.flush()
 
+outfile2 = open("outfile2.gci", "rb+")
+
+for i in range(0, shorter_file_len):
+    val1 = data1[i]
+    val2 = data2[i]
+    if val1 == val2:
+        outfile2.write(bytes([0]))
+        outfile2.flush()
+    else:
+        outfile2.write(bytes([68]))
+        outfile2.flush()

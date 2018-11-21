@@ -34,6 +34,7 @@ I will be decoding files, and describing my offsets as relative to the start of 
 0x439: 4-byte Leaf Pik-Pik Carrot Fall From Sky [unused]
 0x43D: 4-byte Bud Pik-Pik Carrot Fall From Sky [unused]
 0x441: 4-byte Flower Pik-Pik Carrot Fall From Sky [unused]
+0x479: Same as the Pikmin Fall From Sky entries but for onions, unsure of what the other values would do if they exist for bulbmin and PikPik Carrots
 0x4CF: Treasures Collected according to Treasures section on area select screen (1 non-zero byte per number). TODO, find out if the value being 0x02 or 0x06 matters.
 0x58D: Begin Exploration Kit Treasures (including The Key)
 0x834: 4-byte Actual Poko Count
