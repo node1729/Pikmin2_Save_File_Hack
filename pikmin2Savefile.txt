@@ -1,0 +1,42 @@
+each save file is marked by a String PlVa0003 and a 1 byte integer representing the zero indexed save file number
+files are stored in big endian encoding.
+
+Save files are 0xC000 long
+
+I will be decoding files, and describing my offsets as relative to the start of the slot header
+0x10: 4-byte integer appearing to represent the value 1 higher than the day counter. Unsure what this does.
+0x14: 4-byte integer representing the day counter, as seen on the file select screen
+0x2C: 4-byte poko count.
+0x30: 4-byte Treasure count according to save file
+0x3C: 4-byte integer representing time according to save file.
+0x53: Begin enemy Data?: 4-byte integer for enemies killed followed by 4-byte integer for pikmin lost, followed by 1-byte as a seperator. This repeats for <unknown> number of entries
+0x164: Begin the pikmin counts to fall from sky upon entering next sublevel or area TODO: Find out how many bytes this is total
+0x3E9: 4-byte integer representing the day counter. (a value of 1 is added to this, making this value one less than what the game displays)
+0x3ED: 2-byte Bitmask for EK treasures. The least significant bit represents the treasure with the internal ID of 0.
+0x3F1: 4-byte Blue Leaf Pikmin Fall From Sky
+0x3F5: 4-byte Blue Bud Pikmin Fall From Sky
+0x349: 4-byte Blue Flower Pikmin Fall From Sky
+0x3FD: 4-byte Red Leaf Pikmin Fall From Sky
+0x401: 4-byte Red Bud Pikmin Fall From Sky
+0x405: 4-byte Red Flower Pikmin Fall From Sky
+0x409: 4-byte Yellow Leaf Pikmin Fall From Sky
+0x40D: 4-byte Yellow Bud Pikmin Fall From Sky
+0x411: 4-byte Yellow Flower Pikmin Fall From Sky
+0x415: 4-byte Purple Leaf Pikmin Fall From Sky
+0x419: 4-byte Purple Bud Pikmin Fall From Sky
+0x41D: 4-byte Purple Flower Pikmin Fall From Sky
+0x421: 4-byte White Leaf Pikmin Fall From Sky
+0x425: 4-byte White Bud Pikmin Fall From Sky
+0x429: 4-byte White Flower Pikmin Fall From Sky
+0x42D: 4-byte Leaf Bulbmin Fall From Sky
+0x431: 4-byte Bud Bulbmin Fall From Sky
+0x435: 4-byte Flower Bulbmin Fall From Sky
+0x439: 4-byte Leaf Pik-Pik Carrot Fall From Sky [unused]
+0x43D: 4-byte Bud Pik-Pik Carrot Fall From Sky [unused]
+0x441: 4-byte Flower Pik-Pik Carrot Fall From Sky [unused]
+0x479: Same as the Pikmin Fall From Sky entries but for onions, unsure of what the other values would do if they exist for bulbmin and PikPik Carrots
+0x4CF: Treasures Collected according to Treasures section on area select screen (1 non-zero byte per number). TODO, find out if the value being 0x02 or 0x06 matters.
+0x58D: Begin Exploration Kit Treasures (including The Key)
+0x834: 4-byte Actual Poko Count
+0x838: 4-byte Poko count representing the underground total.
+
